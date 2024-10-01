@@ -1,0 +1,1 @@
+{"version":1,"defects":[],"times":{"EmailValidatorTest::testValidEmail":0.005,"EmailValidatorTest::testInvalidEmailWithoutAtSymbol":0,"EmailValidatorTest::testInvalidEmailWithoutDomain":0,"EmailValidatorTest::testInvalidEmailWithSpaces":0}}
