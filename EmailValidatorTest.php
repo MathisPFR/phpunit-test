@@ -9,32 +9,47 @@ class EmailValidatorTest extends TestCase
     public function testValidEmail()
     {
         $validator = new EmailValidator();
-        
-        // Vérifier qu'un email valide passe la validation
-        $this->assertTrue($validator->isValidEmail('test@example.com'));
+        $result = $validator->isValidEmail('user@company.com');
+
+        $this->assertTrue($result['isValid']);
+        $this->assertEquals('Valid email', $result['message']);
     }
 
-    public function testInvalidEmailWithoutAtSymbol()
+    public function testInvalidEmailFormat()
     {
         $validator = new EmailValidator();
-        
-        // Vérifier qu'un email sans symbole @ échoue
-        $this->assertFalse($validator->isValidEmail('testexample.com'));
+        $result = $validator->isValidEmail('invalid-email-format');
+
+        $this->assertFalse($result['isValid']);
+        $this->assertEquals('Invalid email format', $result['message']);
     }
 
-    public function testInvalidEmailWithoutDomain()
+  
+
+    public function testCommonDomainTypos()
     {
         $validator = new EmailValidator();
-        
-        // Vérifier qu'un email sans domaine échoue
-        $this->assertFalse($validator->isValidEmail('test@'));
+        $result = $validator->isValidEmail('user@gnail.com');  // Typo dans le domaine
+
+        $this->assertFalse($result['isValid']);
+        $this->assertEquals('Did you mean to type a different domain?', $result['message']);
     }
 
-    public function testInvalidEmailWithSpaces()
+    public function testDomainNotAllowed()
     {
         $validator = new EmailValidator();
-        
-        // Vérifier qu'un email avec des espaces échoue
-        $this->assertFalse($validator->isValidEmail('test @example.com'));
+        $result = $validator->isValidEmail('user@gmail.com');  // Domaine non autorisé
+
+        $this->assertFalse($result['isValid']);
+        $this->assertEquals('Email domain is not allowed', $result['message']);
+    }
+
+    public function testAllowedDomain()
+    {
+        $validator = new EmailValidator();
+        $result = $validator->isValidEmail('user@company.com');  // Domaine autorisé
+
+        $this->assertTrue($result['isValid']);
+        $this->assertEquals('Valid email', $result['message']);
     }
 }
